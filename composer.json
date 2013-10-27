@@ -1,0 +1,11 @@
+{
+    "name": "capisso/capisso",
+    "description": "Capisso is an open source panel for the hosting industry. Built on a modular core, Capisso uses the latest in server orchestration and management technologies to deliver an exceptional experience for both staff and clients.",
+    "minimum-stability": "dev",
+    "authors": [
+        {
+            "name": "Luke Strickland",
+            "email": "luke@axxim.net"
+        }
+    ]
+}
