@@ -6,7 +6,8 @@ use Phalcon\Loader,
     Phalcon\Mvc\Dispatcher,
     Phalcon\Mvc\View,
     Phalcon\Mvc\ModuleDefinitionInterface,
-    Phalcon\Mvc\View\Engine\Volt;
+    Phalcon\Mvc\View\Engine\Volt,
+    Phalcon\Config\Adapter\Ini;
 
 class Module implements ModuleDefinitionInterface
 {
@@ -34,11 +35,12 @@ class Module implements ModuleDefinitionInterface
      */
     public function registerServices($di)
     {
+        $config = new Ini(__DIR__.'/config/app.ini');
 
         //Registering a dispatcher
         $di->set('dispatcher', function () {
             $dispatcher = new Dispatcher();
-            $dispatcher->setDefaultNamespace("Capisso\Core\Controllers");
+            $dispatcher->setDefaultNamespace("Capisso\\Core\\Controllers");
             return $dispatcher;
         });
 
@@ -58,13 +60,25 @@ class Module implements ModuleDefinitionInterface
         //Registering the view component
         $di->set('view', function () {
             $view = new View();
+
+            $view->setLayoutsDir('../apps/core/views/layouts/');
             $view->setViewsDir('../apps/core/views/');
+            $view->setTemplateAfter('main');
 
             $view->registerEngines(array(
                 ".phtml" => 'voltService'
             ));
 
             return $view;
+        });
+
+        $di->set('db', function() use($config) {
+            return new \Phalcon\Db\Adapter\Pdo\Mysql(array(
+                "host" => $config->database->host,
+                "username" => $config->database->username,
+                "password" => $config->database->password,
+                "dbname" => $config->database->name
+            ));
         });
     }
 

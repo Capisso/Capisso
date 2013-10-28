@@ -58,7 +58,10 @@ class Module implements ModuleDefinitionInterface
         //Registering the view component
         $di->set('view', function () {
             $view = new View();
+
+            $view->setLayoutsDir('../apps/core/views/layouts/');
             $view->setViewsDir('../apps/node-manager/views/');
+            $view->setTemplateAfter('main');
 
             $view->registerEngines(array(
                 ".phtml" => 'voltService'
